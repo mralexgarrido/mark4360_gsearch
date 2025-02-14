@@ -5,6 +5,8 @@ An interactive educational simulator designed to help students understand and pr
 ## Overview
 
 This simulator replicates the Google Ads interface to teach fundamental concepts of paid search advertising. Students can practice campaign creation, keyword research, ad copy writing, and budget management without spending real money.
+<br><br>
+Quick Access: https://mralexgarrido.github.io/mark4360_gsearch/google-search-sim.html
 
 ## Features
 
