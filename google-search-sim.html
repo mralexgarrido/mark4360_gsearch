@@ -1,705 +1,937 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Ads Simulator - MARK 4360</title>
-    <style>
-        :root {
-            --google-blue: #1a73e8;
-            --google-blue-hover: #1557b0;
-            --google-grey: #5f6368;
-            --google-red: #ea4335;
-            --border-color: #dadce0;
-            --bg-grey: #f8f9fa;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #202124;
-            background-color: var(--bg-grey);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header Styles */
-        .header {
-            background-color: white;
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header h1 {
-            font-size: 1.25rem;
-            color: var(--google-grey);
-            margin-left: 20px;
-        }
-
-        /* Navigation */
-        .nav {
-            background: white;
-            padding: 0 20px;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 48px;
-            z-index: 99;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 24px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--google-grey);
-            padding: 12px 0;
-            display: inline-block;
-            border-bottom: 2px solid transparent;
-            font-weight: 500;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--google-blue);
-            border-bottom-color: var(--google-blue);
-        }
-
-        /* Section Styles */
-        section {
-            background: white;
-            margin: 24px 0;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3);
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .section-number {
-            background: var(--google-blue);
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            font-size: 14px;
-        }
-
-        h2 {
-            font-size: 1.25rem;
-            font-weight: 500;
-            color: #202124;
-            margin: 0;
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--google-grey);
-        }
-
-        input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        input[type="url"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 14px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--google-blue);
-            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
-        }
-
-        /* Keyword Input Styles */
-        .keyword-input-container {
-            position: relative;
-        }
-
-        .keyword-tips {
-            background: var(--bg-grey);
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 8px;
-            font-size: 13px;
-        }
-
-        .keyword-tips ul {
-            margin-left: 20px;
-            margin-top: 4px;
-        }
-
-        .keyword-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-            min-height: 40px;
-            padding: 8px;
-            border: 1px dashed var(--border-color);
-            border-radius: 4px;
-        }
-
-        .keyword-tag {
-            background: #e8f0fe;
-            color: var(--google-blue);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .keyword-tag .remove-keyword {
-            cursor: pointer;
-            font-weight: bold;
-            opacity: 0.7;
-        }
-
-        .keyword-tag .remove-keyword:hover {
-            opacity: 1;
-        }
-
-        /* Network Selection */
-        .network-selection {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .network-card {
-            flex: 1;
-            padding: 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .network-card.selected {
-            border-color: var(--google-blue);
-            background-color: #e8f0fe;
-        }
-
-        .network-card h3 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #202124;
-        }
-
-        .network-card p {
-            font-size: 13px;
-            color: var(--google-grey);
-            margin: 0;
-        }
-
-        /* Demographics */
-        .demographics-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
-            background: var(--bg-grey);
-            padding: 16px;
-            border-radius: 4px;
-        }
-
-        .demographic-section label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: normal;
-            cursor: pointer;
-        }
-
-        .demographic-section h4 {
-            margin-bottom: 8px;
-            color: #202124;
-        }
-
-        /* Asset Creation */
-        .asset-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .asset-input {
-            display: flex;
-            gap: 8px;
-            align-items: start;
-        }
-
-        .asset-input input {
-            flex: 1;
-        }
-
-        .asset-tip {
-            font-size: 12px;
-            color: var(--google-grey);
-            margin-top: 4px;
-        }
-
-        .asset-tag {
-            background: #e8f0fe;
-            color: var(--google-blue);
-            padding: 8px;
-            border-radius: 4px;
-            font-size: 13px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Buttons */
-        .button-container {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-
-        button {
-            padding: 8px 24px;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .button-primary {
-            background: var(--google-blue);
-            color: white;
-        }
-
-        .button-primary:hover {
-            background: var(--google-blue-hover);
-        }
-
-        .button-secondary {
-            background: white;
-            color: var(--google-blue);
-            border: 1px solid var(--google-blue);
-        }
-
-        .button-secondary:hover {
-            background: #f4f8fe;
-        }
-
-        .add-button {
-            padding: 4px 12px;
-            background: var(--google-blue);
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        /* Preview Section */
-        .preview-container {
-            background: var(--bg-grey);
-            padding: 24px;
-            border-radius: 8px;
-            margin-top: 24px;
-        }
-
-        .ad-preview {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 16px;
-            border-radius: 4px;
-            box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3);
-        }
-
-        .ad-preview-url {
-            color: var(--google-grey);
-            font-size: 14px;
-        }
-
-        .ad-preview-headline {
-            color: #1a0dab;
-            font-size: 20px;
-            line-height: 1.3;
-            margin: 4px 0;
-            cursor: pointer;
-        }
-
-        .ad-preview-description {
-            color: #4d5156;
-            font-size: 14px;
-            line-height: 1.58;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-
-            section {
-                padding: 16px;
-            }
-
-            .network-selection {
-                flex-direction: column;
-            }
-
-            .demographics-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Error States */
-        .error {
-            border-color: var(--google-red) !important;
-        }
-
-        .error-message {
-            color: var(--google-red);
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        /* Character Counter */
-        .char-counter {
-            font-size: 12px;
-            color: var(--google-grey);
-            text-align: right;
-            margin-top: 4px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Google Ads Simulator - MARK 4360</title>
+  <style>
+    :root {
+      --google-blue: #1a73e8;
+      --google-blue-hover: #1557b0;
+      --google-grey: #5f6368;
+      --google-red: #ea4335;
+      --border-color: #dadce0;
+      --bg-grey: #f8f9fa;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #202124;
+      background-color: var(--bg-grey);
+      scroll-behavior: smooth;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    /* Header */
+    .header {
+      background-color: white;
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header h1 {
+      font-size: 1.25rem;
+      color: var(--google-grey);
+      margin-left: 20px;
+    }
+    /* Navigation */
+    .nav {
+      background: white;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 48px;
+      z-index: 99;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 24px;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--google-grey);
+      padding: 12px 0;
+      display: inline-block;
+      border-bottom: 2px solid transparent;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--google-blue);
+      border-bottom-color: var(--google-blue);
+    }
+    /* Sections */
+    section {
+      background: white;
+      margin: 24px 0;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .section-number {
+      background: var(--google-blue);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-size: 14px;
+    }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #202124;
+      margin: 0;
+    }
+    /* Form Groups */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--google-grey);
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="url"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--google-blue);
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+    }
+    /* Network Cards */
+    .network-selection {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .network-card {
+      flex: 1;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .network-card.selected {
+      border-color: var(--google-blue);
+      background-color: #e8f0fe;
+    }
+    .network-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #202124;
+    }
+    .network-card p {
+      font-size: 13px;
+      color: var(--google-grey);
+      margin: 0;
+    }
+    /* Keywords */
+    .keyword-input-container {
+      position: relative;
+    }
+    .keyword-tips {
+      background: var(--bg-grey);
+      padding: 12px;
+      border-radius: 4px;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .keyword-tips ul {
+      margin-left: 20px;
+      margin-top: 4px;
+    }
+    .keyword-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      min-height: 40px;
+      padding: 8px;
+      border: 1px dashed var(--border-color);
+      border-radius: 4px;
+    }
+    .keyword-tag {
+      background: #e8f0fe;
+      color: var(--google-blue);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .keyword-tag .remove-keyword {
+      cursor: pointer;
+      font-weight: bold;
+      opacity: 0.7;
+    }
+    .keyword-tag .remove-keyword:hover {
+      opacity: 1;
+    }
+    /* Demographics */
+    .demographics-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      background: var(--bg-grey);
+      padding: 16px;
+      border-radius: 4px;
+    }
+    .demographic-section label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: normal;
+      cursor: pointer;
+    }
+    .demographic-section h4 {
+      margin-bottom: 8px;
+      color: #202124;
+    }
+    /* Asset Inputs */
+    .asset-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .asset-input {
+      display: flex;
+      gap: 8px;
+      align-items: start;
+    }
+    .asset-input input {
+      flex: 1;
+    }
+    .asset-tip {
+      font-size: 12px;
+      color: var(--google-grey);
+      margin-top: 4px;
+    }
+    .asset-tag {
+      background: #e8f0fe;
+      color: var(--google-blue);
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    /* Buttons */
+    .button-container {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    button {
+      padding: 8px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .button-primary {
+      background: var(--google-blue);
+      color: white;
+    }
+    .button-primary:hover {
+      background: var(--google-blue-hover);
+    }
+    .button-secondary {
+      background: white;
+      color: var(--google-blue);
+      border: 1px solid var(--google-blue);
+    }
+    .button-secondary:hover {
+      background: #f4f8fe;
+    }
+    .add-button {
+      padding: 4px 12px;
+      background: var(--google-blue);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+    }
+    /* Error States */
+    .error {
+      border-color: var(--google-red) !important;
+    }
+    .error-message {
+      color: var(--google-red);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    /* Character Counter */
+    .char-counter {
+      font-size: 12px;
+      color: var(--google-grey);
+      text-align: right;
+      margin-top: 4px;
+    }
+    /* Floating Save Draft Button */
+    #floating-save {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 16px;
+      background: var(--google-blue);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      transition: background 0.2s;
+    }
+    #floating-save:hover {
+      background: var(--google-blue-hover);
+    }
+    /* Ad Preview Container (on-screen) */
+    .ad-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .ad-preview-card {
+      background: white;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3);
+    }
+    .ad-preview-url {
+      color: var(--google-grey);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .ad-preview-headline {
+      color: #1a0dab;
+      font-size: 20px;
+      line-height: 1.3;
+      margin: 4px 0;
+      cursor: pointer;
+    }
+    .ad-preview-description {
+      color: #4d5156;
+      font-size: 14px;
+      line-height: 1.58;
+    }
+    /* Print Summary Container (hidden by default on screen) */
+    #print-summary {
+      display: none;
+      background: white;
+      color: #000;
+      padding: 24px;
+      margin: 24px auto;
+      max-width: 900px;
+    }
+    #print-summary h2 {
+      margin-bottom: 12px;
+    }
+    #print-summary .summary-section {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 12px;
+    }
+    #print-summary .summary-section:last-child {
+      border-bottom: none;
+    }
+    #print-summary table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+    #print-summary th,
+    #print-summary td {
+      text-align: left;
+      padding: 8px;
+      vertical-align: top;
+    }
+    #print-summary th {
+      width: 160px;
+      font-weight: 600;
+    }
+    /* Hide everything except #print-summary in print mode */
+    @media print {
+      body > *:not(#print-summary) {
+        display: none !important;
+      }
+      #print-summary {
+        display: block !important;
+      }
+      #print-summary {
+        page-break-after: always;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Google Ads Simulator - MARK 4360</h1>
-    </div>
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Google Ads Simulator - MARK 4360</h1>
+  </div>
 
-    <nav class="nav">
-        <ul class="nav-links">
-            <li><a href="#campaign-setup" class="active">Campaign Setup</a></li>
-            <li><a href="#targeting">Targeting</a></li>
-            <li><a href="#assets">Assets</a></li>
-            <li><a href="#ad-creation">Ad Creation</a></li>
-            <li><a href="#review">Review</a></li>
-        </ul>
-    </nav>
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <ul class="nav-links">
+      <li><a href="#campaign-setup" class="active">Campaign Setup</a></li>
+      <li><a href="#targeting">Targeting</a></li>
+      <li><a href="#assets">Assets</a></li>
+      <li><a href="#review">Review</a></li>
+      <li><a href="https://support.google.com/google-ads" target="_blank">Help</a></li>
+    </ul>
+  </nav>
 
-    <div class="container">
-        <section id="campaign-setup">
-            <div class="section-header">
-                <div class="section-number">1</div>
-                <h2>Campaign Setup</h2>
-            </div>
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <!-- 1) Campaign Setup -->
+    <section id="campaign-setup">
+      <div class="section-header">
+        <div class="section-number">1</div>
+        <h2>Campaign Setup</h2>
+      </div>
+      <div class="form-group">
+        <label for="campaign-name">Campaign Name</label>
+        <input type="text" id="campaign-name" required placeholder="Enter your campaign name">
+        <div id="campaign-name-error" class="error-message"></div>
+      </div>
+      <div class="form-group">
+        <label for="budget-type">Budget Type</label>
+        <select id="budget-type">
+          <option value="daily">Daily Budget</option>
+          <option value="total">Campaign Total Budget</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="budget-amount">Budget Amount ($)</label>
+        <input type="number" id="budget-amount" min="1" step="0.01" placeholder="Enter budget amount">
+        <div id="budget-error" class="error-message"></div>
+      </div>
+      <div class="form-group">
+        <label>Campaign Duration</label>
+        <div style="display: flex; gap: 16px;">
+          <div style="flex: 1;">
+            <label for="start-date">Start Date</label>
+            <input type="date" id="start-date">
+          </div>
+          <div style="flex: 1;">
+            <label for="end-date">End Date</label>
+            <input type="date" id="end-date">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Networks</label>
+        <div class="network-selection">
+          <div class="network-card" data-network="search" onclick="selectNetwork('search')">
+            <h3>Google Search Network</h3>
+            <p>Reach people actively searching for your products or services</p>
+          </div>
+          <div class="network-card" data-network="display" onclick="selectNetwork('display')">
+            <h3>Google Display Network</h3>
+            <p>Reach people browsing websites, using apps, and watching videos</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="bidding-strategy">Bidding Strategy</label>
+        <select id="bidding-strategy">
+          <option value="maximize-clicks">Maximize Clicks</option>
+          <option value="maximize-conversions">Maximize Conversions</option>
+          <option value="target-cpa">Target CPA</option>
+          <option value="manual-cpc">Manual CPC</option>
+        </select>
+      </div>
+    </section>
 
-            <div class="form-group">
-                <label for="campaign-name">Campaign Name</label>
-                <input type="text" id="campaign-name" required placeholder="Enter your campaign name">
-                <div id="campaign-name-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="budget-type">Budget Type</label>
-                <select id="budget-type">
-                    <option value="daily">Daily Budget</option>
-                    <option value="total">Campaign Total Budget</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="budget-amount">Budget Amount ($)</label>
-                <input type="number" id="budget-amount" min="1" step="0.01" placeholder="Enter budget amount">
-                <div id="budget-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-                <label>Campaign Duration</label>
-                <div style="display: flex; gap: 16px;">
-                    <div style="flex: 1;">
-                        <label for="start-date">Start Date</label>
-                        <input type="date" id="start-date">
-                    </div>
-                    <div style="flex: 1;">
-                        <label for="end-date">End Date</label>
-                        <input type="date" id="end-date">
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Networks</label>
-                <div class="network-selection">
-                    <div class="network-card" data-network="search" onclick="selectNetwork('search')">
-                        <h3>Google Search Network</h3>
-                        <p>Reach people actively searching for your products or services</p>
-                    </div>
-                    <div class="network-card" data-network="display" onclick="selectNetwork('display')">
-                        <h3>Google Display Network</h3>
-                        <p>Reach people browsing websites, using apps, and watching videos</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="bidding-strategy">Bidding Strategy</label>
-                <select id="bidding-strategy">
-                    <option value="maximize-clicks">Maximize Clicks</option>
-                    <option value="maximize-conversions">Maximize Conversions</option>
-                    <option value="target-cpa">Target CPA</option>
-                    <option value="manual-cpc">Manual CPC</option>
-                </select>
-            </div>
-        </section>
-
-        <section id="targeting">
-            <div class="section-header">
-                <div class="section-number">2</div>
-                <h2>Keywords & Targeting</h2>
-            </div>
-
-            <div class="form-group">
-                <label for="keywords">Keywords</label>
-                <div class="keyword-input-container">
-                    <textarea id="keywords" rows="6" placeholder="Enter keywords (one per line)
+    <!-- 2) Targeting -->
+    <section id="targeting">
+      <div class="section-header">
+        <div class="section-number">2</div>
+        <h2>Keywords & Targeting</h2>
+      </div>
+      <div class="form-group">
+        <label for="keywords">Keywords</label>
+        <div class="keyword-input-container">
+          <textarea id="keywords" rows="6" placeholder="Enter keywords (one per line)
 Example:
 running shoes
 [running shoes]
 &quot;running shoes&quot;
 running shoes"></textarea>
-                    <div class="keyword-tips">
-                        <h4>Match Types:</h4>
-                        <ul>
-                            <li>Broad Match: running shoes</li>
-                            <li>Phrase Match: "running shoes"</li>
-                            <li>Exact Match: [running shoes]</li>
-                        </ul>
-                    </div>
-                    <div id="keyword-list" class="keyword-list"></div>
-                </div>
-            </div>
+          <div class="keyword-tips">
+            <h4>Match Types:</h4>
+            <ul>
+              <li>Broad Match: running shoes</li>
+              <li>Phrase Match: "running shoes"</li>
+              <li>Exact Match: [running shoes]</li>
+            </ul>
+          </div>
+          <div id="keyword-list" class="keyword-list"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="location-targeting">Location Targeting</label>
+        <select id="location-targeting" multiple>
+          <option value="US">United States</option>
+          <option value="CA">Canada</option>
+          <option value="UK">United Kingdom</option>
+          <option value="AU">Australia</option>
+          <option value="DE">Germany</option>
+          <option value="FR">France</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Demographics</label>
+        <div class="demographics-container">
+          <div class="demographic-section">
+            <h4>Age</h4>
+            <label><input type="checkbox" name="age" value="18-24"> 18-24</label>
+            <label><input type="checkbox" name="age" value="25-34"> 25-34</label>
+            <label><input type="checkbox" name="age" value="35-44"> 35-44</label>
+            <label><input type="checkbox" name="age" value="45-54"> 45-54</label>
+            <label><input type="checkbox" name="age" value="55+"> 55+</label>
+          </div>
+          <div class="demographic-section">
+            <h4>Gender</h4>
+            <label><input type="checkbox" name="gender" value="male"> Male</label>
+            <label><input type="checkbox" name="gender" value="female"> Female</label>
+            <label><input type="checkbox" name="gender" value="unknown"> Unknown</label>
+          </div>
+          <div class="demographic-section">
+            <h4>Household Income</h4>
+            <label><input type="checkbox" name="income" value="top_10"> Top 10%</label>
+            <label><input type="checkbox" name="income" value="11_20"> 11-20%</label>
+            <label><input type="checkbox" name="income" value="21_30"> 21-30%</label>
+            <label><input type="checkbox" name="income" value="31_40"> 31-40%</label>
+            <label><input type="checkbox" name="income" value="41_50"> 41-50%</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="interests">Interests</label>
+        <input type="text" id="interests" placeholder="Enter interests (comma-separated, e.g., parental status, marital status)">
+        <div class="keyword-tips">
+          <p>For a full list of affinity categories, refer to this
+            <a href="https://www.wordstream.com/blog/ws/2022/09/21/google-ads-audience-targeting-cheat-sheet" target="_blank">
+              Google Ads Audience Targeting Cheat Sheet
+            </a>.
+          </p>
+        </div>
+      </div>
+    </section>
 
-            <div class="form-group">
-                <label for="location-targeting">Location Targeting</label>
-                <select id="location-targeting" multiple>
-                    <option value="US">United States</option>
-                    <option value="CA">Canada</option>
-                    <option value="UK">United Kingdom</option>
-                    <option value="AU">Australia</option>
-                    <option value="DE">Germany</option>
-                    <option value="FR">France</option>
-                </select>
-            </div>
+    <!-- 3) Assets -->
+    <section id="assets">
+      <div class="section-header">
+        <div class="section-number">3</div>
+        <h2>Asset Generation</h2>
+      </div>
+      <div class="form-group">
+        <label for="final-url">Final URL</label>
+        <input type="url" id="final-url" placeholder="Enter the final URL for your ad">
+      </div>
+      <div class="form-group">
+        <label>Headlines (up to 15)</label>
+        <div id="headline-assets" class="asset-list">
+          <div class="asset-input">
+            <input type="text" id="headline-input" placeholder="Enter headline" maxlength="30" oninput="updateCharCounter('headline')">
+            <button class="add-button" onclick="addAsset('headline')">Add</button>
+          </div>
+        </div>
+        <div class="asset-tip">Add multiple headlines. Best practice: create at least 8-10 headlines.</div>
+        <div id="headline-counter" class="char-counter">0/30</div>
+      </div>
+      <div class="form-group">
+        <label>Descriptions (up to 4)</label>
+        <div id="description-assets" class="asset-list">
+          <div class="asset-input">
+            <input type="text" id="description-input" placeholder="Enter description" maxlength="90" oninput="updateCharCounter('description')">
+            <button class="add-button" onclick="addAsset('description')">Add</button>
+          </div>
+        </div>
+        <div class="asset-tip">Add multiple descriptions. Best practice: create at least 2-3 descriptions.</div>
+        <div id="description-counter" class="char-counter">0/90</div>
+      </div>
+    </section>
 
-            <div class="form-group">
-                <label>Demographics</label>
-                <div class="demographics-container">
-                    <div class="demographic-section">
-                        <h4>Age</h4>
-                        <label><input type="checkbox" name="age" value="18-24"> 18-24</label>
-                        <label><input type="checkbox" name="age" value="25-34"> 25-34</label>
-                        <label><input type="checkbox" name="age" value="35-44"> 35-44</label>
-                        <label><input type="checkbox" name="age" value="45-54"> 45-54</label>
-                        <label><input type="checkbox" name="age" value="55+"> 55+</label>
-                    </div>
-                    <div class="demographic-section">
-                        <h4>Gender</h4>
-                        <label><input type="checkbox" name="gender" value="male"> Male</label>
-                        <label><input type="checkbox" name="gender" value="female"> Female</label>
-                        <label><input type="checkbox" name="gender" value="unknown"> Unknown</label>
-                    </div>
-                    <div class="demographic-section">
-                        <h4>Household Income</h4>
-                        <label><input type="checkbox" name="income" value="top_10"> Top 10%</label>
-                        <label><input type="checkbox" name="income" value="11_20"> 11-20%</label>
-                        <label><input type="checkbox" name="income" value="21_30"> 21-30%</label>
-                        <label><input type="checkbox" name="income" value="31_40"> 31-40%</label>
-                        <label><input type="checkbox" name="income" value="41_50"> 41-50%</label>
-                    </div>
-                </div>
-            </div>
+    <!-- 4) Review & Submit -->
+    <section id="review">
+      <div class="section-header">
+        <div class="section-number">4</div>
+        <h2>Review & Submit</h2>
+      </div>
+      <div class="form-group">
+        <label for="student-name">Student Name</label>
+        <input type="text" id="student-name" required>
+      </div>
+      <div class="form-group">
+        <label for="strategy-description">Campaign Strategy Description</label>
+        <textarea id="strategy-description" rows="4" placeholder="Describe your campaign strategy..."></textarea>
+      </div>
+      <!-- On-screen Ad Preview -->
+      <div style="background: var(--bg-grey); padding: 24px; border-radius: 8px; margin-top: 24px;">
+        <h3>Ad Preview</h3>
+        <div id="ad-preview" class="ad-preview">
+          <!-- Up to 4 ad cards appear here -->
+        </div>
+      </div>
+      <div class="button-container">
+        <button class="button-primary" onclick="updatePreview()">Update Preview</button>
+        <button class="button-secondary" onclick="generatePrintSummary()">Generate & Print Summary</button>
+      </div>
+    </section>
+  </div>
 
-            <div class="form-group">
-                <label for="interests">Interests</label>
-                <input type="text" id="interests" placeholder="Enter interests (comma-separated, e.g., parental status, marital status)">
-                <div class="keyword-tips">
-                    <p>For a full list of affinity categories, refer to this <a href="https://www.wordstream.com/blog/ws/2022/09/21/google-ads-audience-targeting-cheat-sheet" target="_blank">Google Ads Audience Targeting Cheat Sheet</a>.</p>
-                </div>
-            </div>
-        </section>
+  <!-- FLOATING SAVE DRAFT BUTTON -->
+  <button id="floating-save" onclick="saveDraft()">Save Draft</button>
 
-        <section id="assets">
-            <div class="section-header">
-                <div class="section-number">3</div>
-                <h2>Asset Generation</h2>
-            </div>
+  <!-- PRINT SUMMARY (HIDDEN ON SCREEN, VISIBLE ONLY ON PRINT) -->
+  <div id="print-summary"></div>
 
-            <div class="form-group">
-                <label for="final-url">Final URL</label>
-                <input type="url" id="final-url" placeholder="Enter the final URL for your ad">
-            </div>
-
-            <div class="form-group">
-                <label>Headlines (up to 15)</label>
-                <div id="headline-assets" class="asset-list">
-                    <div class="asset-input">
-                        <input type="text" id="headline-input" placeholder="Enter headline" maxlength="30">
-                        <button class="add-button" onclick="addAsset('headline')">Add</button>
-                    </div>
-                </div>
-                <div class="asset-tip">Add multiple headlines. Best practice: create at least 8-10 headlines.</div>
-                <div id="headline-counter" class="char-counter">0/30</div>
-            </div>
-
-            <div class="form-group">
-                <label>Descriptions (up to 4)</label>
-                <div id="description-assets" class="asset-list">
-                    <div class="asset-input">
-                        <input type="text" id="description-input" placeholder="Enter description" maxlength="90">
-                        <button class="add-button" onclick="addAsset('description')">Add</button>
-                    </div>
-                </div>
-                <div class="asset-tip">Add multiple descriptions. Best practice: create at least 2-3 descriptions.</div>
-                <div id="description-counter" class="char-counter">0/90</div>
-            </div>
-        </section>
-
-        <section id="review">
-            <div class="section-header">
-                <div class="section-number">4</div>
-                <h2>Review & Submit</h2>
-            </div>
-
-            <div class="form-group">
-                <label for="student-name">Student Name</label>
-                <input type="text" id="student-name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="strategy-description">Campaign Strategy Description</label>
-                <textarea id="strategy-description" rows="4" placeholder="Describe your campaign strategy..."></textarea>
-            </div>
-
-            <div class="preview-container">
-                <h3>Ad Preview</h3>
-                <div id="ad-preview" class="ad-preview">
-                    <!-- Content will be updated with JavaScript -->
-                </div>
-            </div>
-
-            <div class="button-container">
-                <button class="button-primary" onclick="updatePreview()">Update Preview</button>
-                <button class="button-secondary" onclick="printToPDF()">Print to PDF</button>
-            </div>
-        </section>
-    </div>
-
-    <script>
-        function selectNetwork(network) {
-            const networkCards = document.querySelectorAll('.network-card');
-            networkCards.forEach(card => {
-                card.classList.remove('selected');
-            });
-            const selectedCard = document.querySelector(`.network-card[data-network="${network}"]`);
-            selectedCard.classList.add('selected');
+  <script>
+    // Smooth scroll & active link
+    const navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetSection = document.querySelector(this.getAttribute('href'));
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+    window.addEventListener('scroll', () => {
+      let fromTop = window.scrollY + 60;
+      navLinks.forEach(link => {
+        let section = document.querySelector(link.getAttribute('href'));
+        if (section.offsetTop <= fromTop && section.offsetTop + section.offsetHeight > fromTop) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
         }
+      });
+    });
 
-        function addAsset(type) {
-            const assetInput = document.getElementById(`${type}-input`);
-            const assetValue = assetInput.value.trim();
+    // Network selection
+    function selectNetwork(network) {
+      const networkCards = document.querySelectorAll('.network-card');
+      networkCards.forEach(card => card.classList.remove('selected'));
+      const selectedCard = document.querySelector(`.network-card[data-network="${network}"]`);
+      if(selectedCard) selectedCard.classList.add('selected');
+    }
 
-            if (assetValue === '') return;
+    // Keyword management
+    document.getElementById('keywords').addEventListener('input', updateKeywordList);
+    function updateKeywordList() {
+      const keywordsText = document.getElementById('keywords').value;
+      const keywordList = document.getElementById('keyword-list');
+      keywordList.innerHTML = '';
+      const keywords = keywordsText.split('\n').map(k => k.trim()).filter(k => k !== '');
+      keywords.forEach(keyword => {
+        const tag = document.createElement('div');
+        tag.className = 'keyword-tag';
+        tag.innerHTML = `<span>${keyword}</span>
+                         <span class="remove-keyword" onclick="removeKeywordTag(this)">&times;</span>`;
+        keywordList.appendChild(tag);
+      });
+    }
+    function removeKeywordTag(element) {
+      element.parentElement.remove();
+      const tags = document.querySelectorAll('#keyword-list .keyword-tag span:first-child');
+      const keywords = Array.from(tags).map(tag => tag.textContent);
+      document.getElementById('keywords').value = keywords.join('\n');
+    }
 
-            const assetList = document.getElementById(`${type}-assets`);
-            const assetTag = document.createElement('div');
-            assetTag.className = 'asset-tag';
-            assetTag.innerHTML = `
-                <span>${assetValue}</span>
-                <span class="remove-keyword" onclick="removeAsset(this)">&times;</span>
-            `;
-            assetList.appendChild(assetTag);
-            assetInput.value = '';
+    // Asset management
+    function addAsset(type) {
+      const assetInput = document.getElementById(`${type}-input`);
+      const assetValue = assetInput.value.trim();
+      if (!assetValue) return;
+      const assetList = document.getElementById(`${type}-assets`);
+      const assetTag = document.createElement('div');
+      assetTag.className = 'asset-tag';
+      assetTag.innerHTML = `<span>${assetValue}</span>
+                            <span class="remove-keyword" onclick="removeAsset(this)">&times;</span>`;
+      assetList.appendChild(assetTag);
+      assetInput.value = '';
+      updateCharCounter(type);
+    }
+    function removeAsset(element) {
+      element.parentElement.remove();
+    }
+    function updateCharCounter(type) {
+      const counter = document.getElementById(`${type}-counter`);
+      const assetInput = document.getElementById(`${type}-input`);
+      counter.textContent = `${assetInput.value.length}/${assetInput.maxLength}`;
+    }
 
-            updateCharCounter(type);
+    // Generate up to 4 ad previews
+    function updatePreview() {
+      const adPreview = document.getElementById('ad-preview');
+      const finalUrl = document.getElementById('final-url').value.trim() || 'www.example.com';
+      const headlineTags = document.querySelectorAll('#headline-assets .asset-tag span:first-child');
+      const descriptionTags = document.querySelectorAll('#description-assets .asset-tag span:first-child');
+      const headlines = Array.from(headlineTags).map(tag => tag.textContent);
+      const descriptions = Array.from(descriptionTags).map(tag => tag.textContent);
+
+      // Fallback if none
+      if (headlines.length === 0) headlines.push('Your Headline Here');
+      if (descriptions.length === 0) descriptions.push('Your Description Here');
+
+      const count = Math.min(4, headlines.length, descriptions.length);
+      let html = '';
+      for (let i = 0; i < count; i++) {
+        const headline = headlines[i] || 'Your Headline Here';
+        const description = descriptions[i] || 'Your Description Here';
+        html += `<div class="ad-preview-card">
+                   <div class="ad-preview-url">${finalUrl}</div>
+                   <div class="ad-preview-headline">${headline}</div>
+                   <div class="ad-preview-description">${description}</div>
+                 </div>`;
+      }
+      adPreview.innerHTML = html;
+    }
+
+    // Generate Print Summary
+    function generatePrintSummary() {
+      // First, update the ad preview in case the user hasn't clicked "Update Preview"
+      updatePreview();
+
+      // Gather data
+      const campaignName = document.getElementById('campaign-name').value;
+      const budgetType = document.getElementById('budget-type').value;
+      const budgetAmount = document.getElementById('budget-amount').value;
+      const startDate = document.getElementById('start-date').value;
+      const endDate = document.getElementById('end-date').value;
+      const biddingStrategy = document.getElementById('bidding-strategy').value;
+      const networkSelected = document.querySelector('.network-card.selected');
+      const network = networkSelected ? networkSelected.dataset.network : 'None';
+
+      const keywords = document.getElementById('keywords').value.trim();
+      const locationSelect = document.getElementById('location-targeting');
+      const locationTargeting = Array.from(locationSelect.selectedOptions).map(opt => opt.value).join(', ');
+      const ageChecked = Array.from(document.querySelectorAll('input[name="age"]:checked')).map(cb => cb.value).join(', ');
+      const genderChecked = Array.from(document.querySelectorAll('input[name="gender"]:checked')).map(cb => cb.value).join(', ');
+      const incomeChecked = Array.from(document.querySelectorAll('input[name="income"]:checked')).map(cb => cb.value).join(', ');
+      const interests = document.getElementById('interests').value.trim();
+
+      const finalUrl = document.getElementById('final-url').value.trim();
+      const headlineEls = document.querySelectorAll('#headline-assets .asset-tag span:first-child');
+      const descriptionEls = document.querySelectorAll('#description-assets .asset-tag span:first-child');
+      const headlines = Array.from(headlineEls).map(el => el.textContent).join('; ');
+      const descriptions = Array.from(descriptionEls).map(el => el.textContent).join('; ');
+
+      const studentName = document.getElementById('student-name').value.trim();
+      const strategyDescription = document.getElementById('strategy-description').value.trim();
+
+      // Gather the final ad previews (HTML) from #ad-preview
+      const adPreviewHtml = document.getElementById('ad-preview').innerHTML;
+
+      // Build summary HTML
+      const summaryHTML = `
+        <h2>Google Ads Campaign Summary</h2>
+        <div class="summary-section">
+          <h3>Campaign Setup</h3>
+          <table>
+            <tr><th>Campaign Name:</th><td>${campaignName || '-'}</td></tr>
+            <tr><th>Budget Type:</th><td>${budgetType || '-'}</td></tr>
+            <tr><th>Budget Amount:</th><td>${budgetAmount ? '$' + budgetAmount : '-'}</td></tr>
+            <tr><th>Start Date:</th><td>${startDate || '-'}</td></tr>
+            <tr><th>End Date:</th><td>${endDate || '-'}</td></tr>
+            <tr><th>Network:</th><td>${network}</td></tr>
+            <tr><th>Bidding Strategy:</th><td>${biddingStrategy}</td></tr>
+          </table>
+        </div>
+
+        <div class="summary-section">
+          <h3>Targeting</h3>
+          <table>
+            <tr><th>Keywords:</th><td><pre>${keywords || '-'}</pre></td></tr>
+            <tr><th>Location:</th><td>${locationTargeting || '-'}</td></tr>
+            <tr><th>Age:</th><td>${ageChecked || '-'}</td></tr>
+            <tr><th>Gender:</th><td>${genderChecked || '-'}</td></tr>
+            <tr><th>Income:</th><td>${incomeChecked || '-'}</td></tr>
+            <tr><th>Interests:</th><td>${interests || '-'}</td></tr>
+          </table>
+        </div>
+
+        <div class="summary-section">
+          <h3>Assets</h3>
+          <table>
+            <tr><th>Final URL:</th><td>${finalUrl || '-'}</td></tr>
+            <tr><th>Headlines:</th><td>${headlines || '-'}</td></tr>
+            <tr><th>Descriptions:</th><td>${descriptions || '-'}</td></tr>
+          </table>
+        </div>
+
+        <div class="summary-section">
+          <h3>Ad Preview</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+            ${adPreviewHtml}
+          </div>
+        </div>
+
+        <div class="summary-section">
+          <h3>Student & Strategy</h3>
+          <table>
+            <tr><th>Student Name:</th><td>${studentName || '-'}</td></tr>
+            <tr><th>Strategy Description:</th><td>${strategyDescription || '-'}</td></tr>
+          </table>
+        </div>
+      `;
+      const printSummary = document.getElementById('print-summary');
+      printSummary.innerHTML = summaryHTML;
+
+      // Show summary container & print
+      window.print();
+    }
+
+    // Save Draft
+    function saveDraft() {
+      const draft = {
+        campaignName: document.getElementById('campaign-name').value,
+        budgetType: document.getElementById('budget-type').value,
+        budgetAmount: document.getElementById('budget-amount').value,
+        startDate: document.getElementById('start-date').value,
+        endDate: document.getElementById('end-date').value,
+        biddingStrategy: document.getElementById('bidding-strategy').value,
+        network: (function(){
+          const selected = document.querySelector('.network-card.selected');
+          return selected ? selected.getAttribute('data-network') : '';
+        })(),
+        keywords: document.getElementById('keywords').value,
+        locationTargeting: Array.from(document.getElementById('location-targeting').selectedOptions).map(opt => opt.value),
+        demographics: {
+          age: Array.from(document.querySelectorAll('input[name="age"]:checked')).map(cb => cb.value),
+          gender: Array.from(document.querySelectorAll('input[name="gender"]:checked')).map(cb => cb.value),
+          income: Array.from(document.querySelectorAll('input[name="income"]:checked')).map(cb => cb.value)
+        },
+        interests: document.getElementById('interests').value,
+        finalUrl: document.getElementById('final-url').value,
+        headlines: Array.from(document.querySelectorAll('#headline-assets .asset-tag span:first-child')).map(el => el.textContent),
+        descriptions: Array.from(document.querySelectorAll('#description-assets .asset-tag span:first-child')).map(el => el.textContent),
+        studentName: document.getElementById('student-name').value,
+        strategyDescription: document.getElementById('strategy-description').value
+      };
+      localStorage.setItem('googleAdDraft', JSON.stringify(draft));
+      alert('Draft saved successfully!');
+    }
+    function loadDraft() {
+      const draftData = localStorage.getItem('googleAdDraft');
+      if (draftData) {
+        const draft = JSON.parse(draftData);
+        document.getElementById('campaign-name').value = draft.campaignName || '';
+        document.getElementById('budget-type').value = draft.budgetType || 'daily';
+        document.getElementById('budget-amount').value = draft.budgetAmount || '';
+        document.getElementById('start-date').value = draft.startDate || '';
+        document.getElementById('end-date').value = draft.endDate || '';
+        document.getElementById('bidding-strategy').value = draft.biddingStrategy || 'maximize-clicks';
+        if (draft.network) selectNetwork(draft.network);
+        document.getElementById('keywords').value = draft.keywords || '';
+        updateKeywordList();
+        const locationSelect = document.getElementById('location-targeting');
+        Array.from(locationSelect.options).forEach(option => {
+          option.selected = draft.locationTargeting && draft.locationTargeting.includes(option.value);
+        });
+        document.querySelectorAll('input[name="age"]').forEach(cb => {
+          cb.checked = draft.demographics && draft.demographics.age.includes(cb.value);
+        });
+        document.querySelectorAll('input[name="gender"]').forEach(cb => {
+          cb.checked = draft.demographics && draft.demographics.gender.includes(cb.value);
+        });
+        document.querySelectorAll('input[name="income"]').forEach(cb => {
+          cb.checked = draft.demographics && draft.demographics.income.includes(cb.value);
+        });
+        document.getElementById('interests').value = draft.interests || '';
+        document.getElementById('final-url').value = draft.finalUrl || '';
+        // Headlines
+        const headlineAssets = document.getElementById('headline-assets');
+        headlineAssets.innerHTML = `<div class="asset-input">
+          <input type="text" id="headline-input" placeholder="Enter headline" maxlength="30" oninput="updateCharCounter('headline')">
+          <button class="add-button" onclick="addAsset('headline')">Add</button>
+        </div>`;
+        if (draft.headlines && draft.headlines.length > 0) {
+          draft.headlines.forEach(text => {
+            const tag = document.createElement('div');
+            tag.className = 'asset-tag';
+            tag.innerHTML = `<span>${text}</span>
+                             <span class="remove-keyword" onclick="removeAsset(this)">&times;</span>`;
+            headlineAssets.appendChild(tag);
+          });
         }
-
-        function removeAsset(element) {
-            element.parentElement.remove();
+        updateCharCounter('headline');
+        // Descriptions
+        const descriptionAssets = document.getElementById('description-assets');
+        descriptionAssets.innerHTML = `<div class="asset-input">
+          <input type="text" id="description-input" placeholder="Enter description" maxlength="90" oninput="updateCharCounter('description')">
+          <button class="add-button" onclick="addAsset('description')">Add</button>
+        </div>`;
+        if (draft.descriptions && draft.descriptions.length > 0) {
+          draft.descriptions.forEach(text => {
+            const tag = document.createElement('div');
+            tag.className = 'asset-tag';
+            tag.innerHTML = `<span>${text}</span>
+                             <span class="remove-keyword" onclick="removeAsset(this)">&times;</span>`;
+            descriptionAssets.appendChild(tag);
+          });
         }
+        updateCharCounter('description');
+        document.getElementById('student-name').value = draft.studentName || '';
+        document.getElementById('strategy-description').value = draft.strategyDescription || '';
+        updatePreview();
+        alert('Draft loaded successfully!');
+      }
+    }
 
-        function updateCharCounter(type) {
-            const counter = document.getElementById(`${type}-counter`);
-            const assetInput = document.getElementById(`${type}-input`);
-            counter.textContent = `${assetInput.value.length}/${assetInput.maxLength}`;
+    // Load draft on page load if available
+    window.onload = function() {
+      if (localStorage.getItem('googleAdDraft')) {
+        if (confirm('A saved draft was found. Would you like to load it?')) {
+          loadDraft();
         }
-
-        function updatePreview() {
-            const adPreview = document.getElementById('ad-preview');
-            const finalUrl = document.getElementById('final-url').value.trim() || 'www.example.com';
-            const headlines = document.querySelectorAll('#headline-assets .asset-tag span:first-child');
-            const descriptions = document.querySelectorAll('#description-assets .asset-tag span:first-child');
-
-            let headlineText = headlines.length > 0 ? headlines[0].textContent : 'Your Headline Here';
-            let descriptionText = descriptions.length > 0 ? descriptions[0].textContent : 'Your Description Here';
-
-            adPreview.innerHTML = `
-                <div class="ad-preview-url">${finalUrl}</div>
-                <div class="ad-preview-headline">${headlineText}</div>
-                <div class="ad-preview-description">${descriptionText}</div>
-            `;
-        }
-
-        function printToPDF() {
-            const studentName = document.getElementById('student-name').value.trim();
-            const fileName = studentName ? `google-search-ads-${studentName}.pdf` : 'google-search-ads.pdf';
-            window.print();
-        }
-    </script>
+      }
+    }
+  </script>
 </body>
 </html>
