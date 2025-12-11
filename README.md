@@ -53,23 +53,18 @@ This repository includes an automated GitHub Actions workflow.
 
 ---
 
-### 🚨 CRITICAL FIX: "Workers-specific command" Error 🚨
+### 🚨 Cloudflare Dashboard Configuration Verification 🚨
 
-If your build fails with the error:
-> `[ERROR] It looks like you've run a Workers-specific command in a Pages project.`
+If you are editing the **Build configuration** settings (as seen in your screenshot), ensure they match this exactly:
 
-**You must manually fix your Cloudflare Dashboard settings.** The screenshot you provided shows the incorrect setting.
+| Setting | Value |
+| :--- | :--- |
+| **Build command** | `npm run build` |
+| **Deploy command** | *(Leave this BLANK / Empty)* |
+| **Non-production...** | *(Leave this BLANK / Empty)* |
+| **Build output directory** | `dist` |
+| **Path** | `/` |
 
-1.  Go to your Project in the Cloudflare Dashboard.
-2.  Click the **Settings** tab.
-3.  Click **Builds & deployments**.
-4.  Scroll down to the **Build configuration** section.
-5.  Click the **Edit** (pencil icon) button on the right.
-6.  **LOCATE THE "DEPLOY COMMAND" FIELD.**
-    *   It currently says: `npx wrangler deploy`
-7.  **DELETE THAT TEXT.** Make the field completely empty.
-    *   *Alternatively, you can set it to: `npx wrangler pages deploy dist`*
-8.  Click **Save**.
-9.  Go to the **Deployments** tab and click **Retry deployment**.
-
-**Why this happens:** Cloudflare sometimes defaults to `npx wrangler deploy` (which is for Workers) instead of letting the Pages system automatically upload your `dist` folder. Removing the command fixes this.
+**Why?**
+*   **Build command:** Compiles your code.
+*   **Deploy command:** Should be empty because Cloudflare automatically uploads the `dist` folder for you. Setting this to `npm run build` (or anything else) is incorrect for this setup.
