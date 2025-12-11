@@ -23,19 +23,31 @@ A modern, educational simulation of the Google Ads platform designed for MARK 43
 
 ## Deployment Instructions
 
-### Option 1: GitHub Pages (Recommended)
+### Option 1: GitHub Pages (Manual Branch Deployment)
 
-This repository includes an automated GitHub Actions workflow.
+You have chosen to deploy manually from a branch, without using GitHub Actions.
 
-1.  **Push to GitHub:** Upload this code to a new GitHub repository.
-2.  **Enable Actions:**
-    *   Go to your repository **Settings**.
-    *   Click **Pages** (in the left sidebar).
-    *   Under **Build and deployment** > **Source**, select **GitHub Actions**.
-3.  **Trigger Deployment:**
-    *   Making a commit to the `main` or `master` branch will automatically trigger the build.
-    *   You can verify the status in the **Actions** tab.
-    *   Once complete, your URL will appear in the Settings > Pages section.
+1.  **Install Dependencies:**
+    Make sure you have run `npm install` locally. This will install the `gh-pages` tool.
+
+2.  **Run Deployment Script:**
+    Run the following command in your terminal:
+    ```bash
+    npm run deploy:gh
+    ```
+    **What this does:**
+    *   It automatically runs `npm run build` to compile your code into the `dist` folder.
+    *   It creates a **new branch** called `gh-pages` (if it doesn't exist).
+    *   It pushes the contents of the `dist` folder to that branch.
+
+3.  **Configure GitHub Settings:**
+    *   Go to your repository on GitHub.
+    *   Click **Settings** > **Pages**.
+    *   Under **Build and deployment** > **Source**, select **Deploy from a branch**.
+    *   Under **Branch**, select **`gh-pages`** and ensure the folder is **`/(root)`**.
+    *   Click **Save**.
+
+Your site will be live shortly!
 
 ### Option 2: Cloudflare Pages
 
@@ -51,20 +63,18 @@ This repository includes an automated GitHub Actions workflow.
     *   **Root Directory:** (Leave blank)
 3.  **Deploy:** Click **Save and Deploy**.
 
----
+#### 🚨 Troubleshooting Cloudflare Dashboard 🚨
 
-### 🚨 Cloudflare Dashboard Configuration Verification 🚨
-
-If you are editing the **Build configuration** settings (as seen in your screenshot), ensure they match this exactly:
+If you edit the build settings, ensure they look like this:
 
 | Setting | Value |
 | :--- | :--- |
 | **Build command** | `npm run build` |
 | **Deploy command** | *(Leave this BLANK / Empty)* |
-| **Non-production...** | *(Leave this BLANK / Empty)* |
 | **Build output directory** | `dist` |
-| **Path** | `/` |
 
-**Why?**
-*   **Build command:** Compiles your code.
-*   **Deploy command:** Should be empty because Cloudflare automatically uploads the `dist` folder for you. Setting this to `npm run build` (or anything else) is incorrect for this setup.
+**Do NOT** set "Deploy command" to `npx wrangler deploy` or `npm run build`. Keep it empty.
+
+---
+
+**Note:** This application uses `HashRouter` to ensure compatibility with all static hosting environments. Your URLs will look like `your-site.com/#/campaign`.
