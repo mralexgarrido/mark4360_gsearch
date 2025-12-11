@@ -8,12 +8,9 @@ A modern, educational simulation of the Google Ads platform designed for MARK 43
 *   **Keyword Match Types:** Support for Broad, Phrase, and Exact match logic.
 *   **PDF Export:** Generates a professional campaign report for assignment submission.
 
-## Setup Instructions
-
-Since this is a React application, it requires Node.js to build and run.
+## Local Development
 
 1.  **Install Dependencies:**
-    Open your terminal in this directory and run:
     ```bash
     npm install
     ```
@@ -24,21 +21,34 @@ Since this is a React application, it requires Node.js to build and run.
     ```
     Open the local URL (usually `http://localhost:5173`) in your browser.
 
-3.  **Build for Production (GitHub Pages):**
-    ```bash
-    npm run build
-    ```
-    This will create a `dist/` folder containing the static website.
+## Deployment Instructions
 
-## Deployment to GitHub Pages
-1.  Push this code to a GitHub repository.
-2.  Go to Settings > Pages.
-3.  Source: **GitHub Actions**.
-4.  Use the "Static HTML" workflow or configure a Vite workflow to build from the `dist` folder.
+### Option 1: GitHub Pages (Recommended)
 
-## Technologies
-*   **React:** UI Library
-*   **Vite:** Build Tool
-*   **Tailwind CSS:** Styling
-*   **jsPDF:** PDF Generation
-*   **Lucide React:** Icons
+This repository includes an automated GitHub Actions workflow.
+
+1.  **Push to GitHub:** Upload this code to a new GitHub repository.
+2.  **Enable Actions:**
+    *   Go to your repository **Settings**.
+    *   Click **Pages** (in the left sidebar).
+    *   Under **Build and deployment** > **Source**, select **GitHub Actions**.
+3.  **Trigger Deployment:**
+    *   Making a commit to the `main` or `master` branch will automatically trigger the build.
+    *   You can verify the status in the **Actions** tab.
+    *   Once complete, your URL will appear in the Settings > Pages section.
+
+### Option 2: Cloudflare Pages
+
+1.  **Connect Git:**
+    *   Log in to the Cloudflare Dashboard and go to **Workers & Pages**.
+    *   Click **Create Application** > **Pages** > **Connect to Git**.
+    *   Select your repository.
+2.  **Configure Build:**
+    *   **Project Name:** (Your choice)
+    *   **Framework Preset:** Select **Vite** (or React).
+    *   **Build Command:** `npm run build`
+    *   **Build Output Directory:** `dist`
+3.  **Deploy:** Click **Save and Deploy**.
+
+---
+**Note:** This application uses `HashRouter` to ensure compatibility with all static hosting environments. Your URLs will look like `your-site.com/#/campaign`.
