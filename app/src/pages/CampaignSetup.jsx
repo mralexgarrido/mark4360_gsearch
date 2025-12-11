@@ -10,7 +10,7 @@ const CampaignSetup = () => {
   const handleNext = () => navigate('/targeting');
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in pb-12">
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <h3 className="text-lg font-medium text-gray-900 mb-6">General Settings</h3>
 

@@ -6,6 +6,7 @@ import CampaignSetup from './pages/CampaignSetup';
 import Targeting from './pages/Targeting';
 import AdCreation from './pages/AdCreation';
 import Review from './pages/Review';
+// Import PWA reload prompt if desired, or let autoUpdate handle it silently
 
 function App() {
   return (
