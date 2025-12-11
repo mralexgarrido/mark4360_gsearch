@@ -51,8 +51,26 @@ This repository includes an automated GitHub Actions workflow.
     *   **Root Directory:** (Leave blank)
 3.  **Deploy:** Click **Save and Deploy**.
 
-**Troubleshooting Cloudflare Errors:**
-If you see an error about `wrangler deploy` or "Missing entry-point", ensure your **Build Output Directory** is set to `dist`. This project includes a `wrangler.json` file to help Cloudflare detect the correct settings automatically.
+### 🔴 Fixing "Workers-specific command" Error
+
+If you see an error log saying:
+> `[ERROR] It looks like you've run a Workers-specific command in a Pages project.`
+> `Executing user deploy command: npx wrangler deploy`
+
+**You must change your Cloudflare Dashboard settings:**
+
+1.  Go to your Project in Cloudflare.
+2.  Click **Settings** > **Builds & deployments**.
+3.  Scroll down to **Build configurations** and click **Edit**.
+4.  Look for a field named **Deploy command** (or similar).
+5.  **CLEAR IT** (make it empty) OR change it to:
+    ```bash
+    npx wrangler pages deploy dist
+    ```
+6.  Click **Save**.
+7.  Go to **Deployments** and retry the deployment.
+
+This error happens because `npx wrangler deploy` is for Workers, but you are building a static Page.
 
 ---
 **Note:** This application uses `HashRouter` to ensure compatibility with all static hosting environments. Your URLs will look like `your-site.com/#/campaign`.
