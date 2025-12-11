@@ -44,33 +44,32 @@ This repository includes an automated GitHub Actions workflow.
     *   Click **Create Application** > **Pages** > **Connect to Git**.
     *   Select your repository.
 2.  **Configure Build:**
-    *   **Project Name:** (Your choice)
+    *   **Project Name:** `mark4360gsearch` (or your chosen name)
     *   **Framework Preset:** Select **Vite** (or React).
     *   **Build Command:** `npm run build`
     *   **Build Output Directory:** `dist`
     *   **Root Directory:** (Leave blank)
 3.  **Deploy:** Click **Save and Deploy**.
 
-### 🔴 Fixing "Workers-specific command" Error
-
-If you see an error log saying:
-> `[ERROR] It looks like you've run a Workers-specific command in a Pages project.`
-> `Executing user deploy command: npx wrangler deploy`
-
-**You must change your Cloudflare Dashboard settings:**
-
-1.  Go to your Project in Cloudflare.
-2.  Click **Settings** > **Builds & deployments**.
-3.  Scroll down to **Build configurations** and click **Edit**.
-4.  Look for a field named **Deploy command** (or similar).
-5.  **CLEAR IT** (make it empty) OR change it to:
-    ```bash
-    npx wrangler pages deploy dist
-    ```
-6.  Click **Save**.
-7.  Go to **Deployments** and retry the deployment.
-
-This error happens because `npx wrangler deploy` is for Workers, but you are building a static Page.
-
 ---
-**Note:** This application uses `HashRouter` to ensure compatibility with all static hosting environments. Your URLs will look like `your-site.com/#/campaign`.
+
+### 🚨 CRITICAL FIX: "Workers-specific command" Error 🚨
+
+If your build fails with the error:
+> `[ERROR] It looks like you've run a Workers-specific command in a Pages project.`
+
+**You must manually fix your Cloudflare Dashboard settings.** The screenshot you provided shows the incorrect setting.
+
+1.  Go to your Project in the Cloudflare Dashboard.
+2.  Click the **Settings** tab.
+3.  Click **Builds & deployments**.
+4.  Scroll down to the **Build configuration** section.
+5.  Click the **Edit** (pencil icon) button on the right.
+6.  **LOCATE THE "DEPLOY COMMAND" FIELD.**
+    *   It currently says: `npx wrangler deploy`
+7.  **DELETE THAT TEXT.** Make the field completely empty.
+    *   *Alternatively, you can set it to: `npx wrangler pages deploy dist`*
+8.  Click **Save**.
+9.  Go to the **Deployments** tab and click **Retry deployment**.
+
+**Why this happens:** Cloudflare sometimes defaults to `npx wrangler deploy` (which is for Workers) instead of letting the Pages system automatically upload your `dist` folder. Removing the command fixes this.
