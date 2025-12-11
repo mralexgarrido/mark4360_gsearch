@@ -48,7 +48,11 @@ This repository includes an automated GitHub Actions workflow.
     *   **Framework Preset:** Select **Vite** (or React).
     *   **Build Command:** `npm run build`
     *   **Build Output Directory:** `dist`
+    *   **Root Directory:** (Leave blank)
 3.  **Deploy:** Click **Save and Deploy**.
+
+**Troubleshooting Cloudflare Errors:**
+If you see an error about `wrangler deploy` or "Missing entry-point", ensure your **Build Output Directory** is set to `dist`. This project includes a `wrangler.json` file to help Cloudflare detect the correct settings automatically.
 
 ---
 **Note:** This application uses `HashRouter` to ensure compatibility with all static hosting environments. Your URLs will look like `your-site.com/#/campaign`.
