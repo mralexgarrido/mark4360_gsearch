@@ -1,26 +1,44 @@
-# Google Ads Campaign Simulator - MARK 4360
+# Google Ads Simulator
 
-An interactive educational simulator designed to help students understand and practice Google Ads campaign creation and management. This tool provides hands-on experience with PPC advertising concepts in a risk-free environment.
-
-## Overview
-
-This simulator replicates the Google Ads interface to teach fundamental concepts of paid search advertising. Students can practice campaign creation, keyword research, ad copy writing, and budget management without spending real money.
-<br><br>
-Quick Access: https://mralexgarrido.github.io/mark4360_gsearch/google-search-sim.html
+A modern, educational simulation of the Google Ads platform designed for MARK 4360 students. Built with React, Vite, and Tailwind CSS.
 
 ## Features
+*   **Realistic Interface:** Mimics Google's Material Design 3.
+*   **Ad Strength Meter:** Real-time feedback on ad relevance and variety.
+*   **Keyword Match Types:** Support for Broad, Phrase, and Exact match logic.
+*   **PDF Export:** Generates a professional campaign report for assignment submission.
 
-**Campaign Management**
-- Campaign structure setup and organization
-- Ad group creation and management
-- Budget allocation and optimization
+## Setup Instructions
 
-**Ad Creation**
-- Responsive search ad creation
-- Headlines and descriptions practice
-- Ad preview functionality
+Since this is a React application, it requires Node.js to build and run.
 
-**Keyword Tools**
-- Keyword research simulation
-- Match type implementation
-- Negative keyword management
+1.  **Install Dependencies:**
+    Open your terminal in this directory and run:
+    ```bash
+    npm install
+    ```
+
+2.  **Start Development Server:**
+    ```bash
+    npm run dev
+    ```
+    Open the local URL (usually `http://localhost:5173`) in your browser.
+
+3.  **Build for Production (GitHub Pages):**
+    ```bash
+    npm run build
+    ```
+    This will create a `dist/` folder containing the static website.
+
+## Deployment to GitHub Pages
+1.  Push this code to a GitHub repository.
+2.  Go to Settings > Pages.
+3.  Source: **GitHub Actions**.
+4.  Use the "Static HTML" workflow or configure a Vite workflow to build from the `dist` folder.
+
+## Technologies
+*   **React:** UI Library
+*   **Vite:** Build Tool
+*   **Tailwind CSS:** Styling
+*   **jsPDF:** PDF Generation
+*   **Lucide React:** Icons
