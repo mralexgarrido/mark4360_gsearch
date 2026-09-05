@@ -1,75 +1,69 @@
 # Google Ads Simulator
 
-A modern, educational simulation of the Google Ads platform designed for MARK 4360 students. Built with React, Vite, and Tailwind CSS.
+Build a search-campaign plan, explain your targeting choices, and review the result before using a real advertising platform.
 
-## Features
-*   **Realistic Interface:** Mimics Google's Material Design 3.
-*   **Ad Strength Meter:** Real-time feedback on ad relevance and variety.
-*   **Keyword Match Types:** Support for Broad, Phrase, and Exact match logic.
-*   **PDF Export:** Generates a professional campaign report for assignment submission.
+This MARK 4360 learning tool provides a React-based workspace for campaign setup, keyword and audience targeting, ad copy, and strategy review. It is intended for classroom practice and discussion, not media buying.
 
-## Local Development
+**[Open the simulator](https://mralexgarrido.github.io/mark4360_gsearch/)** · [Report an issue](https://github.com/mralexgarrido/mark4360_gsearch/issues) · [Maintainer guide](MAINTAINING.md)
 
-1.  **Install Dependencies:**
-    ```bash
-    npm install
-    ```
+## What learners can practice
 
-2.  **Start Development Server:**
-    ```bash
-    npm run dev
-    ```
-    Open the local URL (usually `http://localhost:5173`) in your browser.
+- Set campaign identity, budget, dates, bidding, networks, locations, and languages.
+- Add keywords using broad, phrase, or exact notation, and discuss how match choices relate to search intent.
+- Draft headlines and descriptions, inspect an ad preview and local strength feedback, and prepare a campaign review with a strategy explanation and PDF export.
 
-## Deployment Instructions
+The keyword parser recognizes quoted phrases and bracketed exact keywords. This is a local teaching representation, not a recreation of Google's auction, query matching, or forecasting systems. Ad-strength feedback is not an official Google score.
 
-### Option 1: GitHub Pages (Recommended)
+## Start a practice campaign
 
-This repository includes an automated GitHub Actions workflow.
+Choose a fictional business and customer need. Complete campaign setup, targeting, and ad creation, then review the plan and explain how the choices fit together. Export the review using the application's PDF workflow and follow your instructor's separate submission instructions.
 
-1.  **Push to GitHub:** Upload this code to a new GitHub repository.
-2.  **Enable Actions:**
-    *   Go to your repository **Settings**.
-    *   Click **Pages** (in the left sidebar).
-    *   Under **Build and deployment** > **Source**, select **GitHub Actions**.
-3.  **Trigger Deployment:**
-    *   Making a commit to the `main` or `master` branch will automatically trigger the build.
-    *   You can verify the status in the **Actions** tab.
-    *   Once complete, your URL will appear in the Settings > Pages section.
+Campaign state is saved automatically in this browser's local storage. It is not an account-based backup and does not sync between devices. Use fictional data on shared computers, keep an exported copy of important work, and clear site data when removing local drafts. Clearing site data is destructive to that browser's saved work.
 
-### Option 2: Cloudflare Pages
+A useful peer-review prompt is: **Which keyword, ad claim, and destination form the clearest path from customer intent to the desired action?**
 
-1.  **Connect Git:**
-    *   Log in to the Cloudflare Dashboard and go to **Workers & Pages**.
-    *   Click **Create Application** > **Pages** > **Connect to Git**.
-    *   Select your repository.
-2.  **Configure Build:**
-    *   **Project Name:** `mark4360gsearch` (or your chosen name)
-    *   **Framework Preset:** Select **Vite** (or React).
-    *   **Build Command:** `npm run build`
-    *   **Build Output Directory:** `dist`
-    *   **Root Directory:** (Leave blank)
-3.  **Deploy:** Click **Save and Deploy**.
+## Local development
 
----
+Install a Node.js version compatible with the dependencies in [package.json](package.json) and npm, then run:
 
-### 🚨 CRITICAL FIX: "Workers-specific command" Error 🚨
+```sh
+git clone https://github.com/mralexgarrido/mark4360_gsearch.git
+cd mark4360_gsearch
+npm install
+npm run dev
+```
 
-If your build fails with the error:
-> `[ERROR] It looks like you've run a Workers-specific command in a Pages project.`
+Open the address printed by Vite. To build and inspect the result locally:
 
-**You must manually fix your Cloudflare Dashboard settings.** The screenshot you provided shows the incorrect setting.
+```sh
+npm run build
+npm run preview
+```
 
-1.  Go to your Project in the Cloudflare Dashboard.
-2.  Click the **Settings** tab.
-3.  Click **Builds & deployments**.
-4.  Scroll down to the **Build configuration** section.
-5.  Click the **Edit** (pencil icon) button on the right.
-6.  **LOCATE THE "DEPLOY COMMAND" FIELD.**
-    *   It currently says: `npx wrangler deploy`
-7.  **DELETE THAT TEXT.** Make the field completely empty.
-    *   *Alternatively, you can set it to: `npx wrangler pages deploy dist`*
-8.  Click **Save**.
-9.  Go to the **Deployments** tab and click **Retry deployment**.
+The Vite configuration uses relative asset paths (`base: './'`); the standard build output is `dist/`. No lockfile is currently committed, so the local instructions use `npm install`, not `npm ci`. Treat any generated lockfile as a separate reviewed change. No lint or automated test script is declared in the current manifest.
 
-**Why this happens:** Cloudflare sometimes defaults to `npx wrangler deploy` (which is for Workers) instead of letting the Pages system automatically upload your `dist` folder. Removing the command fixes this.
+## Project structure
+
+| Path | Purpose |
+| --- | --- |
+| `src/pages/` | Campaign setup, targeting, ad creation, and review |
+| `src/components/` | Layout, ad preview, tooltips, and strength feedback |
+| `src/contexts/CampaignContext.jsx` | Campaign state, browser persistence, and keyword notation |
+| `src/utils/pdfGenerator.js` | Campaign PDF generation |
+| `legacy/` | Earlier standalone implementation |
+
+The current interface uses React, Vite, Tailwind CSS, and PDF-related libraries listed in the package manifest.
+
+## Maintenance status
+
+**Before merging a publishing change, review the deployment conflicts in [MAINTAINING.md](MAINTAINING.md).** Two existing Pages workflows publish different directories, and the build workflow expects a lockfile that is not committed. This documentation does not resolve or change those workflows.
+
+[`MARK-4360-Search-Ads-Simulator`](https://github.com/mralexgarrido/MARK-4360-Search-Ads-Simulator) is a separate teaching repository. Its source, storage, and build configuration are independent; do not assume one project's fixes or saved data apply to the other. No retirement or migration decision is implied.
+
+## Support and contributions
+
+Use [GitHub Issues](https://github.com/mralexgarrido/mark4360_gsearch/issues) for reproducible bugs or improvements to teaching clarity. Include the step, browser, expected behavior, actual behavior, and a fictional example. Keep credentials, student records, and real campaign details out of issues and screenshots.
+
+For a contribution, use a focused branch, explain the learner benefit, and record actual build and manual checks. Preserve the existing [LICENSE](LICENSE) and third-party attribution. Maintained by [Alex Garrido](https://github.com/mralexgarrido).
+
+Google and Google Ads are trademarks of their respective owner. This independent educational project is not an official Google product and does not purchase or publish advertising.
